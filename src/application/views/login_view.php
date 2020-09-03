@@ -11,7 +11,7 @@
         $('#form').on('submit', function() {
             event.preventDefault();
             $.ajax({
-                url: '/bbs/Auth_check',
+                url: '/bbs/attempt_login',
                 type: 'POST',
                 data: {
                     'admin_password':$('#admin_password').val()

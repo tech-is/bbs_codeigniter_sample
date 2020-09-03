@@ -9,7 +9,7 @@ class Bbs_model extends CI_Model {
         $this->load->database();
     }
 
-    public function get_record($id)
+    public function fetch_one_row($id)
     {
         return $this->db->where('id', $id)
             ->select('id, view_name, message')
@@ -17,7 +17,7 @@ class Bbs_model extends CI_Model {
             ->row_array();
     }
 
-    public function get_all_record($limit=null)
+    public function fetch_all_rows($limit=null)
     {
         !empty($limit)? $this->db->limit($limit): false;
         return $this->db->order_by('post_date', 'ASC')
@@ -25,18 +25,18 @@ class Bbs_model extends CI_Model {
             ->result_array();
     }
 
-    public function insert_record($data)
+    public function insert_row($data)
     {
         return $this->db->insert('message', $data);
     }
 
-    public function update_record($id, $data)
+    public function update_row($id, $data)
     {
         return $this->db->where('id', $id)
             ->update('message', $data);
     }
 
-    public function delete_record($id)
+    public function delete_row($id)
     {
         return $this->db->where('id', $id)
             ->delete('message');
