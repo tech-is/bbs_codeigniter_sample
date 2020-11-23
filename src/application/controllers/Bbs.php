@@ -156,14 +156,16 @@ class Bbs extends CI_Controller
             if (empty($this->input->post('admin_password', true))) {
                 header('HTTP/1.1 401 Unauthorized');
                 echo json_encode(['message' => 'パスワードが間違っています']);
+                exit();
             }
             $password = $this->input->post('admin_password', true);
-            if (password_verify($password, PASSWORD)) {
-                $_SESSION['admin_login'] = true;
-                echo json_encode(['message' => '認証成功']);
+            if (!password_verify($password, PASSWORD)) {
+                header('HTTP/1.1 401 Unauthorized');
+                echo json_encode(['message' => 'パスワードが間違っています']);
+                exit();
             }
-            header('HTTP/1.1 401 Unauthorized');
-            echo json_encode(['message' => 'パスワードが間違っています']);
+            $_SESSION['admin_login'] = true;
+            echo json_encode(['message' => '認証成功']);
         } else {
             header('HTTP/1.1 405 Method Not Allowed');
             echo json_encode(['message' => '許可されていないメソッドです']);
