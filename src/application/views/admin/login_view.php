@@ -1,6 +1,6 @@
 <body>
     <form id="form">
-        <div>
+        <div class="input-wrapper">
             <label for="admin_password">ログインパスワード</label>
             <input id="admin_password" type="password" name="admin_password" value="">
         </div>
@@ -11,7 +11,7 @@
         $('#form').on('submit', function() {
             event.preventDefault();
             $.ajax({
-                url: '/bbs/attempt_login',
+                url: '<?= base_url('admin/attempt_login') ?>',
                 type: 'POST',
                 data: {
                     'admin_password':$('#admin_password').val()
@@ -19,7 +19,7 @@
                 datatype: 'json'
             }).then(
             function (data) {
-                window.location.href = "/bbs/admin";
+                window.location.href = "<?= base_url('admin') ?>";
             },
             function (error) {
                 let err_msg = JSON.parse(error.responseText);

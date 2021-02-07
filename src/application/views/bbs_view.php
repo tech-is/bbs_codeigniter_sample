@@ -1,16 +1,16 @@
 <body>
     <h1>ひと言掲示板</h1>
-    <form action="/bbs/add_bbs" method="post">
+    <form action="<?= base_url("bbs/add_bbs") ?>" method="post">
         <div>
             <?php if (!empty($success_message)): ?>
                 <p class="success_message">
-                    ・<?= $success_message; ?>
+                    ・<?= html_escape($success_message) ?>
                 </p>
             <?php endif; ?>
             <?php if (!empty($error_message)): ?>
             <ul class="error_message">
                 <?php foreach ($error_message as $message): ?>
-                    <li>・<?= $message; ?></li>
+                    <li>・<?= html_escape($message) ?></li>
                 <?php endforeach; ?>
             </ul>
             <?php endif; ?>
@@ -30,10 +30,10 @@
             <?php foreach( $message_array as $value ): ?>
             <article>
                 <div class="info">
-                    <h2><?php echo $value['view_name']; ?></h2>
-                    <time><?php echo date('Y年m月d日 H:i', strtotime($value['post_date'])); ?></time>
+                    <h2><?= html_escape($value['view_name']) ?></h2>
+                    <time><?= date('Y年m月d日 H:i', strtotime($value['post_date'])); ?></time>
                 </div>
-                <p><?php echo $value['message']; ?></p>
+                <p><?= nl2br(html_escape($value['message'])); ?></p>
             </article>
             <?php endforeach; ?>
         <?php endif; ?>
