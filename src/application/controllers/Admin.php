@@ -74,7 +74,7 @@ class Admin extends CI_Controller
      * 
      * @return void
      */
-    private function request_validation($target) {
+    private function request_validation() {
         $config = [
             [
                 'field' => 'view_name',
