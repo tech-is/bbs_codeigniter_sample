@@ -31,7 +31,7 @@ class Bbs_model extends CI_Model {
      */
     public function fetch_all_rows($limit=null)
     {
-        if (empty($limit)) { $this->db->limit($limit); }
+        if ($limit) { $this->db->limit($limit); }
         return $this->db->order_by('post_date', 'ASC')
             ->get('message')
             ->result_array();

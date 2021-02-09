@@ -76,22 +76,20 @@ class Admin extends CI_Controller
      */
     private function request_validation($target) {
         $config = [
-            "update" => [
-                [
-                    'field' => 'view_name',
-                    'label' => '表示名',
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => '%sを入力してください。'
-                    ]
-                ],
-                [
-                    'field' => 'message',
-                    'label' => 'ひと言メッセージ',
-                    'rules' => 'required',
-                    'errors' => [
-                        'required' => '%sを入力してください。',
-                    ]
+            [
+                'field' => 'view_name',
+                'label' => '表示名',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '%sを入力してください。'
+                ]
+            ],
+            [
+                'field' => 'message',
+                'label' => 'ひと言メッセージ',
+                'rules' => 'required',
+                'errors' => [
+                    'required' => '%sを入力してください。',
                 ]
             ]
         ];
@@ -119,9 +117,10 @@ class Admin extends CI_Controller
      */
     public function edit()
     {
+        $data = null;
         $this->isSession();
 
-        if (!($id = $this->input->get('message_id')) || !is_numeric($id)) {
+        if (!($id = $this->input->get('message_id', true)) || !is_numeric($id)) {
             $_SESSION['error_message'][] = '更新に必要なパラメータが含まれていません';
             redirect(self::ADMIN);
         }
@@ -152,8 +151,8 @@ class Admin extends CI_Controller
             redirect(self::LOGIN);
         }
     
-        if (empty($id = $this->input->get('message_id')) || !is_numeric($id)) {
-            $_SESSION['error_message'][] = '更新に必要なパラメータが含まれていません';
+        if (empty($id = $this->input->get('message_id', true)) || !is_numeric($id)) {
+            $_SESSION['error_message'][] = '削除に必要なパラメータが含まれていません';
             redirect(self::ADMIN);
         }
                 
@@ -186,15 +185,7 @@ class Admin extends CI_Controller
             exit;
         }
 
-        if (empty($this->input->post('admin_password', true))) {
-            header('HTTP/1.1 401 Unauthorized');
-            echo json_encode(['message' => 'パスワードが間違っています']);
-            exit();
-        }
-
-        $password = $this->input->post('admin_password', true);
-
-        if (!password_verify($password, self::PASSWORD)) {
+        if (!password_verify($this->input->post('admin_password', true), self::PASSWORD)) {
             header('HTTP/1.1 401 Unauthorized');
             echo json_encode(['message' => 'パスワードが間違っています']);
             exit();
@@ -218,7 +209,7 @@ class Admin extends CI_Controller
 
         $limit = null;
 
-        if (!empty($this->input->get('limit', null)) && is_numeric($this->input->get('limit', null))) {
+        if (!empty($this->input->get('limit', true)) && is_numeric($this->input->get('limit', true))) {
             $limit = $this->input->get('limit');
         }
 
@@ -248,16 +239,16 @@ class Admin extends CI_Controller
      */
     public function update()
     {
-        $error_message = [];
+        $data = null;
 
         if (!($id = $this->input->post('message_id', true))) {
             $_SESSION['error_message'][] = '更新に必要なパラメータが含まれていません';
             redirect(self::ADMIN);
         }
 
-        if (!$this->request_validation('update')) {
-            $errors = $this->form_validation->error_array();
-            $_SESSION['error_message'] = $errors;
+        if (!$this->request_validation()) {
+            $error_message = $this->form_validation->error_array();
+            $_SESSION['error_message'] = $error_message;
             redirect(self::ADMIN."update?message_id={$id}");
         }
 
