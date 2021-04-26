@@ -93,7 +93,7 @@ class Admin extends CI_Controller
                 ]
             ]
         ];
-        $this->form_validation->set_rules($config[$target]);
+        $this->form_validation->set_rules($config);
         return $this->form_validation->run();
     }
 
@@ -249,7 +249,9 @@ class Admin extends CI_Controller
         if (!$this->request_validation()) {
             $error_message = $this->form_validation->error_array();
             $_SESSION['error_message'] = $error_message;
-            redirect(self::ADMIN."update?message_id={$id}");
+            //redirect(self::ADMIN."update?message_id={$id}");
+            redirect(self::ADMIN);
+            exit;
         }
 
         $name = $this->input->post('view_name', true);
